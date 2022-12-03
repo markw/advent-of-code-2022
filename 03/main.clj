@@ -13,9 +13,9 @@
   
 (defn find-compartment-priority 
   [s]
-  (let [length (/ (count s) 2)]
+  (let [size (/ (count s) 2)]
     (find-priority 
-      (map set (partition length s)))))
+      (map set (partition size s)))))
 
 (defn find-badge-priority 
   [ss]
