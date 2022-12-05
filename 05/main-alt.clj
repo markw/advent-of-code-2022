@@ -23,11 +23,9 @@
   [s]
   (let [tokens (.split s " ")]
     (map
-      #(Integer. %)
-      (list
-        (get tokens 1)
-        (get tokens 3)
-        (get tokens 5)))))
+      #(%1 (Integer. (get tokens %2)))
+      [identity dec dec]
+      [1 3 5])))
 
 (def moves
   (map 
@@ -38,21 +36,19 @@
 
 (defn do-move
   [stacks [n from to] items]
-  (let [from-index (dec from)
-        to-index (dec to)]
-    (reduce
-      (fn [acc [k v]] (assoc acc k v))
-      stacks
-      [[from-index (drop n (get stacks from-index))]
-       [to-index (reduce #(cons %2 %1) (get stacks to-index) items)]])))
+  (reduce
+    (fn [acc [k v]] (assoc acc k v))
+    stacks
+    [[from (drop n (get stacks from))]
+     [to (reduce #(cons %2 %1) (get stacks to) items)]]))
 
 (defn do-move-part-1
   [stacks [n from to]]
-  (do-move stacks [n from to] (take n (get stacks (dec from)))))
+  (do-move stacks [n from to] (take n (get stacks from))))
 
 (defn do-move-part-2
   [stacks [n from to]]
-  (do-move stacks [n from to] (reverse (take n (get stacks (dec from))))))
+  (do-move stacks [n from to] (reverse (take n (get stacks from)))))
 
 (defn get-all-firsts
   [stacks]
