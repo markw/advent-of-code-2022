@@ -55,16 +55,14 @@
   (reduce str
     (map first stacks)))
 
-(println "part 1"
-  (get-all-firsts 
-    (reduce
-      (fn [acc move] (do-move-part-1 acc move))
-      stacks
-      moves)))
+(defn solve
+  [s f]
+  (println s
+    (get-all-firsts 
+      (reduce
+        #(f %1 %2)
+        stacks
+        moves))))
 
-(println "part 2"
-  (get-all-firsts 
-    (reduce
-      (fn [acc move] (do-move-part-2 acc move))
-      stacks
-      moves)))
+(solve "part 1" do-move-part-1)
+(solve "part 2" do-move-part-2)
