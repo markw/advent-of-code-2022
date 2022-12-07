@@ -51,8 +51,11 @@
     []
     fs))
 
+(defn dir-to-delete
+  [all-dir-sizes
+    (let [unused-space (- 70000000 (apply max all-dir-sizes))]
+      (apply min (filter #(< 30000000 (+ unused-space %)) all-dir-sizes)))])
+
 (let [all-dir-sizes (calc-all-dir-sizes (build-fs input))]
   (println "part 1" (reduce + (filter #(<  % 100000) all-dir-sizes)))
-  (println "part 2" 
-    (let [unused-space (- 70000000 (apply max all-dir-sizes))]
-      (apply min (filter #(< 30000000 (+ unused-space %)) all-dir-sizes)))))
+  (println "part 2" (dir-to-delete all-dir-sizes)))
