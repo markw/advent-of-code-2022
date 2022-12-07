@@ -30,14 +30,14 @@
           :default (recur (rest input) fs path))))))
 
 (defn calc-dir-size
-  [name files]
+  [dir]
   (reduce
     (fn [acc [k v]]
       (if (map? v)
-        (+ acc (calc-dir-size k v))
+        (+ acc (calc-dir-size v))
         (+ acc v)))
     0
-    files))
+    dir))
 
 (defn calc-all-dir-sizes
   [fs]
@@ -45,7 +45,7 @@
     (fn [acc [k v]]
       (if (map? v)
         (concat 
-          (conj acc (calc-dir-size k v))
+          (conj acc (calc-dir-size v))
           (calc-all-dir-sizes v))
         acc))
     []
