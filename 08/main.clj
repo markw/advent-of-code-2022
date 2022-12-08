@@ -4,41 +4,25 @@
                   (mapv #(Integer. %)
                         (.split s ""))) input))
 
-(defn visible-on-row?
-  [grid r c indices]
-  (let [cell (get-in grid [r c])
-        cells (mapv #(get-in grid [r %]) indices)]
-    (every? #(> cell %) cells)))
-
-(defn visible-from-left?
-  [grid r c]
-  (visible-on-row? grid r c (range 0 c)))
-
-(defn visible-from-right?
-  [grid r c]
-  (visible-on-row? grid r c (range (inc c) (count grid))))
-
-(defn visible-on-col?
-  [grid r c indices]
-  (let [cell (get-in grid [r c])
-        cells (mapv #(get-in grid [% c]) indices)]
-    (every? #(> cell %) cells)))
-
-(defn visible-from-above?
-  [grid r c]
-  (visible-on-col? grid r c (range 0 r)))
-
-(defn visible-from-below?
-  [grid r c]
-  (visible-on-col? grid r c (range (inc r) (count grid))))
+(defn visible-1?
+  [grid r c dr dc]
+  (let [tree (get-in grid [r c])]
+    (loop [r r c c]
+      (let [next-r (+ r dr) 
+            next-c (+ c dc)
+            next-tree (get-in grid [next-r next-c])]
+        (cond
+          (nil? next-tree) true
+          (<= tree next-tree) false
+          :default (recur next-r next-c))))))
 
 (defn visible?
   [grid r c]
-  (or
-    (visible-from-left? grid r c)
-    (visible-from-right? grid r c)
-    (visible-from-above? grid r c)
-    (visible-from-below? grid r c)))
+  (or 
+    (visible-1? grid r c 0 1)
+    (visible-1? grid r c 0 -1)
+    (visible-1? grid r c 1 0)
+    (visible-1? grid r c -1 0)))
 
 (println "part 1"
   (count
@@ -53,10 +37,10 @@
     (loop [score 0 r r c c]
       (let [next-r (+ r dr) 
             next-c (+ c dc)
-            t (get-in grid [next-r next-c])]
+            next-tree (get-in grid [next-r next-c])]
         (cond
-          (nil? t) score
-          (<= tree t) (inc score)
+          (nil? next-tree) score
+          (<= tree next-tree) (inc score)
           :default (recur (inc score) next-r next-c))))))
 
 (defn scenic-score
