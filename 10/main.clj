@@ -10,9 +10,7 @@
 (defn parse-program
   [ss]
   (reduce
-    (fn [acc [n x]]
-      (let [[n0 x0] (last acc)]
-        (conj acc [(+ n n0)(+ x x0)])))
+    (fn [acc sig] (conj acc (mapv + sig (last acc))))
     [[0 1]]
     (map parse-instruction ss)))
 
