@@ -28,10 +28,10 @@
 
 (defn draw-pixel
   [program n]
-  (let [sprite-pos (register-x program (inc n))
+  (let [sprite-center (register-x program (inc n))
+        sprite-pos (set (map (partial + sprite-center)[-1 0 1]))
         pixel-pos (mod n 40)]
-    (if (and (>= pixel-pos (dec sprite-pos))
-             (<= pixel-pos (inc sprite-pos))) "#" ".")))
+    (if (contains? sprite-pos pixel-pos) "#" ".")))
 
 (defn render
   [pixels]
