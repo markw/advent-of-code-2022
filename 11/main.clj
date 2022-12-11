@@ -74,7 +74,7 @@
   (let [{items :items test :test op :op t :true f :false}  monkey
         new-items-fn (condp = part
                        1 #(int (/ (op %) 3))
-                       2 #(mod (op %) lcm))
+                       2 #(mod (op %) lcm)) ;; <-- big hint from Reddit for this
         new-items (map new-items-fn items)]
     (map
       #(if (test %) [% t] [% f])
@@ -100,25 +100,18 @@
     monkeys
     (range (count monkeys))))
 
-(println "part 1"
- (reduce * 
-   (take 2
-     (reverse
-       (sort
-         (map :inspected
-           (reduce
-             (partial play-round 1)
-             all-monkeys
-             (range 20))))))))
+(defn solve
+  [part rounds]
+  (println "part" part
+    (reduce * 
+      (take 2
+        (reverse
+          (sort
+            (map :inspected
+              (reduce
+                (partial play-round part)
+                all-monkeys
+                (range rounds)))))))))
 
-
-(println "part 2"
- (reduce * 
-   (take 2
-     (reverse
-       (sort
-         (map :inspected
-           (reduce
-             (partial play-round 2)
-             all-monkeys
-             (range 10000))))))))
+(solve 1 20)
+(solve 2 10000)
