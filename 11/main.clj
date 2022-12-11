@@ -73,8 +73,8 @@
   [part monkey]
   (let [{items :items test :test op :op t :true f :false}  monkey
         new-items-fn (condp = part
-                       1 (fn [n] (int (/ (op n) 3)))
-                       2 (fn [n] (mod (op n) lcm)))
+                       1 #(int (/ (op %) 3))
+                       2 #(mod (op %) lcm))
         new-items (map new-items-fn items)]
     (map
       #(if (test %) [% t] [% f])
