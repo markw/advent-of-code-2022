@@ -41,7 +41,7 @@
     (let [adjacent (mapcat #(neighbors grid %) current)
           not-seen (set ((group-by #(contains? seen %) adjacent) false))]
       (if (or (and (= 1 part)(contains? not-seen start))
-              (and (= 2 part)(some #(= (int \a)(get-in grid %)) adjacent)))
+              (and (= 2 part)(some #(= (int \a)(get-in grid %)) not-seen)))
         step
         (recur (inc step)
                (apply conj seen adjacent)
