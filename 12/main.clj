@@ -20,18 +20,17 @@
     69 (int \z)
     e)) 
 
-(defn can-move-to?
-  [grid from-pos to-pos]
-  (let [from-elevation (get-in grid from-pos)
-        to-elevation (get-in grid to-pos)]
-    (and (some? from-elevation)
-         (let [delta (- (elevation to-elevation) (elevation from-elevation))]
-          (<= delta 1)))))
+(defn legal-step?
+  [grid from to]
+  (if-let [from-elevation (elevation (get-in grid from))]
+    (let  [to-elevation (elevation (get-in grid to))
+           delta (- to-elevation from-elevation)]
+      (<= delta 1))))
 
 (defn neighbors
   [grid pos]
   (filter 
-    #(can-move-to? grid % pos)
+    #(legal-step? grid % pos)
     (for [r [pos] 
           c [[-1 0][1 0][0 1][0 -1]]] 
       (mapv + r c))))
@@ -39,13 +38,14 @@
 (defn solve
   [part grid {:keys [start end]}]
   (loop [step 1 seen #{end} current #{end}]
-    (let [adjacent (set (mapcat #(neighbors grid %) current))]
-      (if (or (and (= 1 part)(contains? adjacent start))
+    (let [adjacent (mapcat #(neighbors grid %) current)
+          not-seen (set ((group-by #(contains? seen %) adjacent) false))]
+      (if (or (and (= 1 part)(contains? not-seen start))
               (and (= 2 part)(some #(= (int \a)(get-in grid %)) adjacent)))
         step
         (recur (inc step)
                (apply conj seen adjacent)
-               (set (filter #(not (contains? seen %)) adjacent)))))))
+               not-seen)))))
 
 (let [grid (parse-grid "input.txt")
       init (find-start-and-end grid)]
