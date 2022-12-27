@@ -15,17 +15,16 @@
     alist))
 
 (defn mix
-  ([coll] (mix coll coll))
-  ([coll mixed]
-   (loop [coll coll mixed mixed]
-     (if (empty? coll)
-       mixed
-       (let [[h & t] coll]
-         (recur
-           t
-           (move mixed 
-                 (.indexOf mixed h)
-                 h)))))))
+  [coll mixed]
+  (loop [coll coll mixed mixed]
+    (if (empty? coll)
+      mixed
+      (let [[h & t] coll]
+        (recur
+          t
+          (move mixed 
+                (.indexOf mixed h)
+                h))))))
 
 (defn find-zero
   [alist]
