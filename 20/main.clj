@@ -31,16 +31,17 @@
           (dec d))))))
 
 (defn mix
-  [coll]
-  (loop [coll coll mixed coll]
-    (if (empty? coll)
-      mixed
-      (let [[h & t] coll]
-        (recur
-          t
-          (move mixed 
-                (.indexOf mixed h)
-                (first h)))))))
+  ([coll] (mix coll coll))
+  ([coll mixed]
+   (loop [coll coll mixed mixed]
+     (if (empty? coll)
+       mixed
+       (let [[h & t] coll]
+         (recur
+           t
+           (move mixed 
+                 (.indexOf mixed h)
+                 (first h))))))))
 
 (defn find-zero
   [coll]
@@ -55,6 +56,23 @@
       zero-index (find-zero mixed)]
   ;(println "zero-index" zero-index)
   (println "part 1" 
+           (reduce
+             (fn [acc index]
+               (+ acc (first (get mixed (rem index (count coll))))))
+             0
+             (mapv 
+               #(+ zero-index %) 
+               [1000 2000 3000]))))
+
+(let [coll (mapv 
+             (fn [[value index]] [(* value 811589153) index])
+             (parse-input "input.txt"))
+      mixed (loop [mixed coll n 10]
+              (if (zero? n) mixed
+                (recur (mix coll mixed) (dec n))))
+      zero-index (find-zero mixed)]
+  ;(println "zero-index" zero-index)
+  (println "part 2"
            (reduce
              (fn [acc index]
                (+ acc (first (get mixed (rem index (count coll))))))
