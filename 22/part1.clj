@@ -104,6 +104,7 @@
 
 (defn do-move
   [board [r c :as pos] distance dir]
+  ;(println "do-move" pos distance dir)
   (loop [pos pos n distance]
     (if (zero? n)
       pos
@@ -112,7 +113,7 @@
           pos
           (recur next-pos (dec n)))))))
 
-(defn navigate
+(defn do-all-moves
   [board moves]
   (loop [[h & t] moves [r c :as pos] (start board) dir :right]
     (if (nil? h) 
@@ -136,4 +137,4 @@
 (let [input (parse-input "input.txt")
       board (parse-board input)
       moves (parse-moves input)]
-  (println (password (navigate board moves))))
+  (println (password (do-all-moves board moves))))
