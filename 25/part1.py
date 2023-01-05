@@ -45,9 +45,8 @@ def decimal_to_snafu(n):
 # print(decimal_to_snafu(1747))
 # print(decimal_to_snafu(4890))
 
-lines = open("input.txt","r").read().split("\n")
-nums = map(snafu_to_decimal,lines)
+input = open("input.txt","r").read().split("\n")
 total = 0
-for n in nums:
-    total += n
+for line in input:
+    total += snafu_to_decimal(line)
 print("Part 1:", decimal_to_snafu(total))
