@@ -2,19 +2,14 @@ def snafu_to_decimal(s):
     xs = []
     for c in s:
         match c:
-            case "0":
-                xs.append(0)
-            case "1":
-                xs.append(1)
-            case "2":
-                xs.append(2)
+            case "0" | "1" | "2":
+                xs.append(int(c))
             case "-":
                 xs.append(-1)
             case "=":
                 xs.append(-2)
 
-    exp = len(xs)-1
-    n = 0
+    n, exp = 0, len(xs)-1
     for x in xs:
        n += (x * (5 ** exp))
        exp -= 1
@@ -30,14 +25,13 @@ def decimal_to_snafu(n):
                 n -= m
             case 3:
                 s = '=' + s
-                n = n - 3 + 5
+                n = n - m + 5
             case 4:
                 s = '-' + s
-                n = n - 4 + 5
+                n = n - m + 5
 
-        n = n // 5
+        n //= 5
     return s
-
 
 # print(snafu_to_decimal("1=-0-2"))
 # print(snafu_to_decimal("2=-1=0"))
