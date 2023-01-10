@@ -80,16 +80,10 @@ def solve(start,end,blizzards):
         paths=new_paths
 
 total = 0
-minutes,blizzards = solve(start,end,blizzards)
-print(minutes)
-total += minutes
-
-minutes,blizzards = solve(end,start,blizzards)
-print(minutes)
-total += minutes
-
-minutes,blizzards = solve(start,end,blizzards)
-print(minutes)
-total += minutes
+for pair in [(start,end),(end,start),(start,end)]:
+    src,dest = pair
+    minutes,blizzards = solve(src,dest,blizzards)
+    print(minutes)
+    total += minutes
 
 print("total:", total)
