@@ -1,6 +1,3 @@
-import types
-dirs = types.SimpleNamespace()
-
 not_empty = lambda s: len(s) > 0
 lines = list(filter(not_empty, open("input.txt","r").read().split("\n")));
 start = (0,lines[0].index("."))
@@ -12,12 +9,12 @@ print("start=",start,"end=",end)
 
 first = lambda b: b[0]
 
-dirs.up    = (-1,0)
-dirs.down  = (1,0)
-dirs.left  = (0,-1)
-dirs.right = (0,1)
+up    = (-1,0)
+down  = (1,0)
+left  = (0,-1)
+right = (0,1)
 
-deltas = [dirs.up, dirs.down, dirs.left, dirs.right, (0,0)]
+deltas = [up, down, left, right, (0,0)]
 
 walls = set()
 blizzards = []
@@ -27,13 +24,13 @@ for r in range(len(lines)):
             case '#':
                 walls.add((r,c)) 
             case 'v':
-                blizzards.append(((r,c), dirs.down))
+                blizzards.append(((r,c), down))
             case '>':
-                blizzards.append(((r,c), dirs.right))
+                blizzards.append(((r,c), right))
             case '<':
-                blizzards.append(((r,c), dirs.left))
+                blizzards.append(((r,c), left))
             case '^':
-                blizzards.append(((r,c), dirs.up))
+                blizzards.append(((r,c), up))
 
 def next(b):
     rc, d = b
@@ -62,8 +59,8 @@ valid_row = lambda r: r >= 0 and r <= max_row
 valid_col = lambda r: r >= 0 and r <= max_col
 
 def valid(r,c,b_locs):
-    return valid_row(r) and valid_col(c) and (r,c) not in walls and (r,c) not in b_locs
-
+    rc = (r,c)
+    return valid_row(r) and valid_col(c) and rc not in walls and rc not in b_locs
 
 def solve(start,end,blizzards):
     paths = [start]
